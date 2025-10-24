@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobSnap: Your Essential Job Search Organizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;600;700&display=swap');
+        
+        :root {
+            --color-primary: #3b82f6; /* Tailwind blue-500 */
+            --color-success: #10b981; /* Tailwind emerald-500 */
+            --color-accent: #f97316; /* Tailwind orange-500 */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+
+        /* --- GRADIENT ANIMATION --- */
+        .jobsnap-gradient {
+            background-image: linear-gradient(90deg, #3b82f6, #0ea5e9, #60a5fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-shift 4s ease infinite;
+            background-size: 200% auto;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- CTA PULSE EFFECT --- */
+        @keyframes pulse-shadow {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        .cta-button {
+            transition: all 0.2s ease-in-out;
+            /* Initial shadow and animation */
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+            animation: pulse-shadow 2s infinite;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.6);
+            /* Pause pulse on hover */
+            animation: none; 
+        }
+        
+        /* --- BLOB BACKGROUND ANIMATION (New) --- */
+        .hero-background {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: rgba(59, 130, 246, 0.1); /* Light Blue */
+            border-radius: 50%;
+            opacity: 0.5;
+            filter: blur(80px);
+            z-index: 0;
+            animation: moveBlob 15s infinite alternate;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(16, 185, 129, 0.1); /* Light Green */
+            top: 50%;
+            left: 50%;
+            animation: moveBlob 18s infinite alternate-reverse;
+        }
+
+        @keyframes moveBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(400px, -200px) scale(1.1); }
+            66% { transform: translate(-300px, 300px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        /* --- END BLOB BACKGROUND --- */
+
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.15);
+        }
+
+        /* SVG Icon Styles for Mockup */
+        .svg-icon {
+            color: var(--color-primary);
+        }
+        
+        /* New section specific styles */
+        .grid-header {
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* --- FEATURE CARD SHIMMER (New) --- */
+        @keyframes shimmer-highlight {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .shimmer {
+            background: linear-gradient(
+                90deg, 
+                #f8fafc 0%, 
+                rgba(255, 255, 255, 0.5) 20%, 
+                #f8fafc 40%
+            );
+            background-size: 200% 100%;
+            animation: shimmer-highlight 5s infinite;
+            border-color: #fca5a5 !important; /* Tailwind red-300 */
+        }
+        
+        /* Apply shimmer specifically to premium cards (Grid 3 opacity-70) */
+        #premium-features .feature-card {
+            box-shadow: 0 4px 10px rgba(249, 115, 22, 0.1);
+            border-color: #fed7aa; /* Tailwind orange-200 */
+        }
+        
+        .shimmer-card:nth-child(2) { animation-delay: 0.2s; }
+        .shimmer-card:nth-child(3) { animation-delay: 0.4s; }
+        
+        /* --- MOCKUP CARD 3D EFFECT (New) --- */
+        .mockup-container {
+            perspective: 1000px;
+        }
+        
+        .mockup-card-3d {
+            transition: transform 0.5s ease-out;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        
+        .mockup-card-3d:hover {
+            transform: rotateX(2deg) rotateY(-2deg) translateZ(10px);
+        }
+        
+        /* New class for disabled button look on DIV */
+        .disabled-cta-div {
+            cursor: default;
+            pointer-events: none; /* Disables all interaction */
+        }
+
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Header & Navigation (Placeholder for a clean look) -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            <div class="text-2xl font-extrabold jobsnap-gradient font-['Outfit']">
+                JobSnap
+            </div>
+            <a href="#install" class="text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-full shadow-lg transition">
+                Get Started
+            </a>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- Hero Section -->
+        <section class="py-16 md:py-24 bg-gray-50 hero-background">
+            <!-- Background Blobs -->
+            <div class="blob" style="top: -100px; left: -100px;"></div>
+            <div class="blob blob-2" style="bottom: -150px; right: -150px;"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                <h1 class="text-5xl md:text-7xl font-extrabold mb-4 font-['Outfit']">
+                    <span class="jobsnap-gradient block">Conquer Your Job Search</span>
+                    <span class="text-gray-900 block mt-2">with Zero Spreadsheets.</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                    JobSnap is the essential browser extension that automates tracking, reminds you of deadlines, and gives you the confidence to land the offer.
+                </p>
+                
+                <!-- Main Call to Action (CTA) - RETAINED LINK TO INSTALL XPI -->
+                <a id="install" 
+                   href="https://addons.mozilla.org/firefox/downloads/file/4585922/jobsnap_job_applicationtracker-1.76.xpi" 
+                   target="_blank" 
+                   class="cta-button inline-flex items-center justify-center px-10 py-4 border border-transparent text-lg font-bold rounded-xl text-white bg-blue-500 hover:bg-blue-600 shadow-xl transition transform">
+                   🚀 Install JobSnap for Firefox (v1.76)
+                </a>
+                <p class="mt-3 text-sm text-gray-500">Also coming soon to Chrome!</p>
+            </div>
+        </section>
+
+        <!-- Core Features Section (Updated to be Comprehensive) -->
+        <section class="py-16 md:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center mb-16 text-gray-900 font-['Outfit']">
+                    The Ultimate Feature Set for Job Hunters
+                </h2>
+                
+                <!-- Grid 1: Automation & Reminders -->
+                <div class="mb-16">
+                    <h3 class="text-2xl font-bold text-blue-600 grid-header font-['Outfit']">
+                        ✨ Automation & Reminders
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Feature: One-Click Auto-Fill -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">🧠 One-Click Auto-Fill</h4>
+                            <p class="text-gray-600 text-sm">
+                                Instantly save job titles, company names, URLs, and deadlines from sites like LinkedIn, Indeed, and Glassdoor directly into your tracker.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature: Smart Reminders & Notifications -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">🔔 Proactive Notifications</h4>
+                            <p class="text-gray-600 text-sm">
+                                Get daily desktop push notifications for all deadlines and interviews within a 7-day window. Never miss a critical date again.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature: Background Alarm Check -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">⏲️ Background Alarms</h4>
+                            <p class="text-gray-600 text-sm">
+                                The extension runs a periodic check every 6 hours to ensure no reminder or notification is missed, even if the browser has been closed.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature: Notification Click-to-Scroll -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">🔗 Scroll to Job</h4>
+                            <p class="text-gray-600 text-sm">
+                                Clicking a desktop notification automatically opens JobSnap and scrolls directly to the relevant job card in your list.
+                            </p>
+                        </div>
+                         
+                        <!-- Feature: Autosave/Draft Protection -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">✅ Autosave Protection</h4>
+                            <p class="text-gray-600 text-sm">
+                                All changes to the Add Job form are saved automatically as a draft while you type, so you never lose progress.
+                            </p>
+                        </div>
+                        
+                         <!-- Feature: Calendar Export -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">📅 Calendar Export (.ICS)</h4>
+                            <p class="text-gray-600 text-sm">
+                                Easily download .ICS files for your deadlines and interviews to import them instantly into Google Calendar or Outlook [cite: popup.js].
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid 2: Organization & Productivity -->
+                <div class="mb-16">
+                    <h3 class="text-2xl font-bold text-green-600 grid-header font-['Outfit']">
+                        ✅ Organization & Productivity
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Feature: Job-Specific Task Manager -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">📝 Task Manager & Prep Score</h4>
+                            <p class="text-gray-600 text-sm">
+                                Track default and custom tasks for every job. Your Prep Score displays the percentage of tasks completed right on the job card.
+                            </p>
+                        </div>
+
+                        <!-- Feature: File Attachments -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">📑 Resume/CL Storage</h4>
+                            <p class="text-gray-600 text-sm">
+                                Securely attach and view the specific Resume and Cover Letter files used for each application.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature: CSV Export -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">📤 Full Data Export (CSV)</h4>
+                            <p class="text-gray-600 text-sm">
+                                Create portable backups of your entire job history and pipeline data with a single click.
+                            </p>
+                        </div>
+
+                        <!-- Feature: Job Rating -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">⭐ Excitement Rating</h4>
+                            <p class="text-gray-600 text-sm">
+                                Use the 1-5 star rating to prioritize the most important roles, which is then tracked in your Analytics dashboard.
+                            </p>
+                        </div>
+
+                        <!-- Feature: Dark Mode -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">🌗 Dark Mode Toggle</h4>
+                            <p class="text-gray-600 text-sm">
+                                Switch between light and dark themes for comfortable tracking in any lighting environment.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature: Global Delete -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">🗑️ Status-Based Deletion</h4>
+                            <p class="text-gray-600 text-sm">
+                                Clear old records quickly by deleting all jobs associated with a specific status (e.g., 'Rejected' or 'Not Applied').
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid 3: Analytics & Premium Tools -->
+                <div id="premium-features">
+                    <h3 class="text-2xl font-bold text-orange-600 grid-header font-['Outfit']">
+                        📊 Analytics & Premium Tools
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Feature: Pipeline Funnel/Analytics -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">📈 Conversion Rate & Goals</h4>
+                            <p class="text-gray-600 text-sm">
+                                View your Application-to-Interview and Interview-to-Offer rates and get insights into how many apps/interviews you need for the next success.
+                            </p>
+                        </div>
+
+                        <!-- Feature: Career Intel (Premium) - SHIMMER 1 -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg opacity-80 shimmer shimmer-card">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">🧠 Career Intel (Premium)</h4>
+                            <p class="text-gray-600 text-sm">
+                                Access external market data and action tips categorized by career stage. Data is updated frequently from public sources to ensure relevance.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature: Offer Comparison (Premium) - SHIMMER 2 -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg opacity-80 shimmer shimmer-card">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">💰 Offer Comparison Tools (Premium)</h4>
+                            <p class="text-gray-600 text-sm">
+                                Utilize the Multi-Offer Evaluator and Relocation Calculator to make data-backed financial decisions for your next role.
+                            </p>
+                        </div>
+                        
+                        <!-- Feature: Visual Charts -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">📊 Visual Charts</h4>
+                            <p class="text-gray-600 text-sm">
+                                See Pipeline Funnels, Rejection Analysis, and Source Effectiveness charts to identify weaknesses and strengths in your job search strategy.
+                            </p>
+                        </div>
+
+                        <!-- Feature: Trial/License -->
+                        <div class="feature-card bg-white p-6 rounded-xl border border-gray-200 shadow-lg">
+                            <h4 class="text-xl font-bold mb-2 text-gray-900">⏱️ 14-Day Free Trial</h4>
+                            <p class="text-gray-600 text-sm">
+                                Try all premium features completely risk-free before committing to an affordable, one-time license purchase.
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Value Proposition Section (Updated to be Clean) -->
+        <section class="py-16 bg-white border-t border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Text Content -->
+                    <div class="lg:order-1">
+                        <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-gray-900 font-['Outfit']">
+                            Stop Tracking Jobs, Start Landing Them.
+                        </h2>
+                        <p class="text-lg text-gray-600 mb-6">
+                            A chaotic job search leads to missed opportunities and unnecessary stress. JobSnap gives you clarity, control, and confidence through advanced organization.
+                        </p>
+                        
+                        <ul class="space-y-4 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="text-green-500 font-bold mr-3 mt-1 text-xl">✓</span>
+                                <p>
+                                    Organize Everything: Attach Resumes/Cover Letters [cite: popup.js], store recruiter contacts, and take rich notes per application.
+                                </p>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 font-bold mr-3 mt-1 text-xl">✓</span>
+                                <p>
+                                    Export & Backup: Use the CSV Export feature to create portable backups of your entire application history at any time [cite: popup.js].
+                                </p>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 font-bold mr-3 mt-1 text-xl">✓</span>
+                                <p>
+                                    Work Smarter: Toggle Dark Mode [cite: popup.js] and use the Career Intel dashboard to analyze market trends (Premium) [cite: popup.html, popup.js].
+                                </p>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-500 font-bold mr-3 mt-1 text-xl">✓</span>
+                                <p>
+                                    Offer Tools: Utilize the Multi-Offer Evaluator and Relocation Calculator to make data-backed career decisions (Premium) [cite: popup.html, popup.js].
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Mockup Image/Visual -->
+                    <div class="lg:order-2 p-6 bg-blue-50 border-4 border-blue-200 rounded-2xl shadow-xl mockup-container">
+                        <!-- Added mockup-card-3d class here -->
+                        <div class="bg-white p-4 rounded-lg shadow-lg mockup-card-3d">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-xl font-bold text-blue-600">My Job Pipeline</h3>
+                                <span class="text-sm font-semibold bg-gray-200 px-3 py-1 rounded-full">5 Total Jobs</span>
+                            </div>
+                            <div class="space-y-3">
+                                <!-- Mock Card 1 (Interview) -->
+                                <div class="p-3 border-l-4 border-green-500 bg-green-50 rounded-md">
+                                    <p class="font-semibold text-gray-800">Software Engineer @ Acme Corp</p>
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>Status: Interviewed</span>
+                                        <span class="text-red-500 font-bold">🗣 Interview in 3 days</span>
+                                    </div>
+                                </div>
+                                <!-- Mock Card 2 (Applied) -->
+                                <div class="p-3 border-l-4 border-blue-500 bg-blue-50 rounded-md">
+                                    <p class="font-semibold text-gray-800">Data Analyst @ Innovate Labs</p>
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>Status: Applied</span>
+                                        <span class="text-orange-500 font-bold">⚠ Deadline in 6 days</span>
+                                    </div>
+                                </div>
+                                <!-- Mock Card 3 (Offer) -->
+                                <div class="p-3 border-l-4 border-orange-500 bg-orange-50 rounded-md">
+                                    <p class="font-semibold text-gray-800">Product Manager @ GlobalTech</p>
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>Status: Offer</span>
+                                        <span class="text-gray-500">100% Prep</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing / Trial Section (Retained) -->
+        <section class="py-16 md:py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 font-['Outfit']">
+                    Start Your Search Now, Risk-Free.
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+                    Try JobSnap Premium with all features unlocked for 14 Days. No commitment required to experience the full power of automation.
+                </p>
+                
+                <div class="max-w-sm mx-auto bg-white p-8 rounded-2xl shadow-2xl border-4 border-blue-500/50">
+                    <h3 class="text-3xl font-extrabold text-gray-900 mb-2">JobSnap Premium</h3>
+                    <p class="text-gray-500 mb-6">Unlock Unlimited Tracking & Analytics</p>
+                    
+                    <!-- UPDATED: Changed from <a> to <div> and added disabled class -->
+                    <div class="cta-button disabled-cta-div inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-green-500 hover:bg-green-600 shadow-lg transition transform">
+                        Unlock Permanent License
+                    </div>
+                    <p class="mt-4 text-sm text-gray-600">Affordable, one-time purchase price.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (Retained) -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 JobSnap - Job Application Tracker. All rights reserved.</p>
+            <p class="mt-2 text-gray-400">Powered by automated efficiency.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
